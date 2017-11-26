@@ -1,13 +1,6 @@
-var promise = require('bluebird');
 
-var options = {
-  // Initialization Options
-  promiseLib: promise
-};
-
-var pgp = require('pg-promise')(options);
-var connectionString = 'postgres://postgres:postgres@localhost:5432/proyectosis';
-var db = pgp(connectionString);
+var modeldb = require('../services/db');
+var db = modeldb.getDB();
 
 module.exports = {
   getAllShirts: getAllShirts,
@@ -33,7 +26,7 @@ function getAllShirts(req, res, next){
 }
 function getSingleShirt(req, res, next){
   var camID = parseInt(req.params.id);
-  db.one('select * from camiseta where id_camisa = $1', camID)
+  db.one('select * from camiseta where id_camiseta = $1', camID)
     .then(function (data) {
       res.status(200)
         .json({
@@ -50,7 +43,7 @@ function getSingleShirt(req, res, next){
 function createShirt(req, res, next) {
   req.body.id = parseInt(req.body.id);
   req.body.id_tipo = parseInt(req.body.id_tipo);
-  db.none('insert into camiseta(id_camisa, id_tipocam, color, img)' +
+  db.none('insert into camiseta(id_camiseta, id_tipocam, color, img)' +
       'values(${id}, ${id_tipo}, ${color}, ${img})',
     req.body)
     .then(function () {
@@ -66,7 +59,7 @@ function createShirt(req, res, next) {
 }
 
 function updateShirt(req, res, next) {
-  db.none('update camiseta set id_tipocam=$1, color=$2, img=$3 where id_camisa=$4',
+  db.none('update camiseta set id_tipocam=$1, color=$2, img=$3 where id_camiseta=$4',
     [parseInt(req.body.id_tipo), req.body.color,
       req.body.img, parseInt(req.params.id)])
     .then(function () {
@@ -83,7 +76,7 @@ function updateShirt(req, res, next) {
 
 function removeShirt(req, res, next) {
   var camID = parseInt(req.params.id);
-  db.result('delete from camiseta where id_camisa = $1', camID)
+  db.result('delete from camiseta where id_camiseta = $1', camID)
     .then(function (result) {
       /* jshint ignore:start */
       res.status(200)
