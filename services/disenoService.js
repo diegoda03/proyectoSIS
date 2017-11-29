@@ -24,6 +24,7 @@ function getAllDesigns(req, res, next){
   });
 }
 function getSingleDesign(req, res, next){
+
   var disID = parseInt(req.params.id);
   db.one('select * from disenno where id_disenno = $1', disID)
     .then(function (data) {
@@ -40,6 +41,7 @@ function getSingleDesign(req, res, next){
 }
 
 function createDesign(req, res, next) {
+
   req.body.id = parseInt(req.body.id);
   req.body.autor = parseInt(req.body.autor);
   db.none('insert into disenno(id_disenno, nombre, descripcion, imagen, autor)' +
@@ -58,6 +60,7 @@ function createDesign(req, res, next) {
 }
 
 function updateDesign(req, res, next) {
+
   db.none('update disenno set nombre=$1, descripcion=$2, imagen=$3, autor=$4 where id_disenno=$5',
     [req.body.nombre, req.body.descripcion, req.body.imagen,
       req.body.autor, parseInt(req.params.id)])
@@ -74,6 +77,7 @@ function updateDesign(req, res, next) {
 }
 
 function removeDesign(req, res, next) {
+
   var disID = parseInt(req.params.id);
   db.result('delete from disenno where id_disenno = $1', disID)
     .then(function (result) {

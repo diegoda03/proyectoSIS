@@ -9,7 +9,7 @@ module.exports = {
   getDB: getDB
 };
 function initDB(){
-  console.log("si entra hp");
+  
   var pgp = require('pg-promise')(options);
 
   var connectionString = 'postgres://postgres:postgres@localhost:5432/proyectosis';
